@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Point of Sale</title>
+</head>
+<body>
+	<script>
+		/*
+		Below is a basic Point of Sale system that we might
+		see in a shop or restaurant. Some of the functions
+		aren't yet complete. Your job is to complete them
+		so we can sell items to customers!
+		*/
+
+		/*
+		First, let's set up some demo data for us
+		to use for testing
+		*/
+		function Item(name, price, quantity, id) {
+			this.name = name;
+			this.price = price;
+			this.quantity = quantity;
+			this.id = id;
+		}
+
+		var inventory = [
+			new Item(
+				"Gumball",
+				25,
+				30,
+				12333
+			),
+			new Item(
+				"Chocolate Bar",
+				100,
+				40,
+				34223
+			),
+			new Item(
+				"Fancy Chocolate Bar",
+				300,
+				10,
+				8932
+			)
+		];
+
+		function Customer(name, cart) {
+			this.name = name;
+			this.cart = cart;
+		}
+
+		var customers = [
+			new Customer(
+				"erty",
+				[
+					12333,
+					12333,
+					34223
+				]
+			),
+			new Customer(
+				"john",
+				[
+					8932,
+					12333
+				]
+			)
+		];
+
+		var totalMoneyMade = 32923;
+
+		/*
+			Todo: Complete the following functions
+		*/
+
+		function getItemByID(itemID) {
+			// todo: take in item id as a number
+			// and return a reference to that item
+			// in the inventory
+
+			// go through each item in the inventory
+			for (var i = 0; i < inventory.length; i++) {
+				// if that item's id is itemID, return the item
+				if (inventory[i].id === itemID) {
+					return inventory[i];
+				}
+			}
+			return null;
+		}
+
+		// tests!
+		console.log(getItemByID(0) === null)
+		console.log(getItemByID(12333).price === 25);
+		console.log(getItemByID(12333).name === "Gumball");
+
+
+		function getSubTotalForCustomer(customerObj) {
+			// todo: take in a reference to a customer object
+			// and return the total price of all the items
+			// in their cart
+
+			// starts a var to hold the rising subtotal as the items are counted
+			var subTotal = 0;
+			// go through each item in the specified customer's cart
+			for (var i = 0; i < customerObj.cart.length; i++) {
+				// for every item in that customer's cart (ID# as its value), run through getItemByID(), adding the correspomnding price
+				subTotal += getItemByID(customerObj.cart[i]).price;
+			}
+			// this provides the actual subtotal of the provided customer's cart contents
+			return subTotal; 
+		}
+
+		// these tests check to make sure of the price value of the customers' carts
+		console.log(
+			getSubTotalForCustomer(customers[0]) === 150
+		);
+		console.log(
+			getSubTotalForCustomer(customers[1]) === 325
+		);
+
+		function markItemSold(itemObj) {
+			// todo: take in an item reference, and update
+			// the new quantity of that item
+			
+			// each time an item is marked sold, it's quantity is decreased by one
+			itemObj.quantity -= 1;
+		}
+		// these tests set a var to hold the original quantity of an item's inventory
+		var initialQuantity = inventory[0].quantity;
+		// runs the function with an argument of the first item in inventory
+		markItemSold(inventory[0]);
+		// and consoles that item's updated quantity to make sure its been updated
+		console.log(inventory[0].quantity);
+
+		function emptyCart(customerObj) {
+			// todo: take in a customer object
+			// and modify that customer so that their
+			// cart is empty
+
+			// each time a cart gets emptied, its array is set to empty
+			customerObj.cart = [];
+		}
+		// these tests set a var to hold the original contents of a customer's cart in an array
+		var initialContents = customers[0].cart;
+		// runs the function with an argument of the first customer
+		emptyCart(customers[0])
+		// and consoles the contents of that customer's cart to make sure its empty
+		console.log(customers[0].cart);
+
+		function checkOutCustomer(customerObj) {
+			//todo: take in a customer object, compute the total
+			// cost of the things in their cart, add that to the
+			// totalMoneyMade, update our inventory,
+			// and empty that customer's cart
+
+			// sets a var to hold the subtotal of a customer's cart's contents
+			var subTotal = getSubTotalForCustomer(customerObj);
+			// adds that subtotal to the total revenue
+			totalMoneyMade += subTotal;
+			// updates the quantities of the items' inventories that were sold
+			markItemSold();
+			// and empties the cart of the provided customer
+			emptyCart(customerObj);
+		}
+		// these tests console the subtotal for the second to compare to the increase in revenue
+		console.log(getSubTotalForCustomer(customers[1]) === totalMoneyMade - subTotal);
+		// consoles updated inventory to compare item totals
+		console.log(inventory);
+		// consoles the customer's cart to verify it is empty
+		console.log(customers[1].cart);
+		// ***NOTE*** using customers[1] because [0] still has an empty cart from 2 functions ago
+
+		function createNewCustomer(name) {
+			// todo: add a new customer to the system
+			// with an empty cart and name provided
+			// return a reference to that customer
+			
+			// sets a var to contain the new customer data: a name and an array containing item IDs
+			var newCustomer = new Customer("David", [34223]);
+			// returns that variable
+			return newCustomer;
+		}
+		// this test consoles the newly created customer
+		console.log(createNewCustomer(customers[2]));
+
+		function createNewItem(name, price, id, quantity) {
+			// todo: add a new item to the system with
+			// the name, price, quantity, and id provided
+			// return a reference to that item
+
+			// sets a var to contain the new item data: a name, price, ID, and quantity
+			var newItem = new Item("Hershey Kiss", 30, 12345, 50);
+			// returns that variable
+			return newItem;
+		}
+		// this test consoles the newly created item
+		console.log(createNewItem(inventory));
+
+	</script>
+</body>
+</html>
