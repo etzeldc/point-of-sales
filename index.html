@@ -154,18 +154,16 @@
 			// totalMoneyMade, update our inventory,
 			// and empty that customer's cart
 
-			// sets a var to hold the subtotal of a customer's cart's contents
-			var subTotal = getSubTotalForCustomer(customerObj);
-			// adds that subtotal to the total revenue
-			totalMoneyMade += subTotal;
+			// adds the subtotal of tbhe customer's cart contents to the total revenue
+			totalMoneyMade += getSubTotalForCustomer(customerObj);
 			// updates the quantities of the items' inventories that were sold
-			markItemSold();
+			for (itemID of customerObj.cart) {markItemSold(getItemByID(itemID));}
 			// and empties the cart of the provided customer
 			emptyCart(customerObj);
 		}
-		// these tests console the subtotal for the second to compare to the increase in revenue
-		console.log(getSubTotalForCustomer(customers[1]) === totalMoneyMade - subTotal);
-		// consoles updated inventory to compare item totals
+		// these tests console new values to note changes after the customer has checked out
+		console.log(totalMoneyMade);
+		// consoles updated inventory to note change in item totals
 		console.log(inventory);
 		// consoles the customer's cart to verify it is empty
 		console.log(customers[1].cart);
